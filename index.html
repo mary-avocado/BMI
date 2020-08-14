@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> Body mass index </title>
+    <meta charset="utf-8">
+    <style>
+      html, body {
+        height: 100vh;
+        margin: 0;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background-color: grey;
+        align-items: baseline;
+        background-image: url('minicat.jpg');
+        background-repeat: no-repeat;
+        background-position: center bottom;
+        background-size: cover;
+        min-width: 850px;
+      }
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+      }
+      input[type="number"] {
+      -moz-appearance: textfield;
+      }
+      input, label {
+        font-size: 2rem;
+        text-align: right;
+      }
+      div {
+        margin: 10px;
+      }
+      .parameters {
+        position: relative;
+        left: 50%;
+      }
+      label {
+        color: aliceblue;
+      }
+      input {
+        background: transparent;
+        color: aliceblue;
+        border-bottom: 1px solid aliceblue;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+      }
+      input:focus {
+        outline: none;
+      }
+      .result {
+        color: aliceblue;
+        font-size: 2rem;
+        font-weight: bold;
+      }
+      #less, #normal, #over {
+        position: absolute;
+        top: 5px;
+        left: 650px;
+      }
+      @media (max-width: 800px) {
+        #less, #normal, #over {
+        position: absolute;
+        top: 200px;
+        left: 650px;
+      }
+      }
+
+      </style>
+    <script>
+      window.onload =
+        function () {
+          const weight = document.getElementById("weight");  
+          const height = document.getElementById("height"); 
+          const bmi = document.getElementById("bmi");
+          weight.addEventListener(
+            "keyup",
+            function (event) {
+              console.log("weight keyup");
+              bmi.value = (weight.value / Math.pow((height.value/100), 2)).toFixed(2);
+              setVis();
+            }
+          );
+          height.addEventListener(
+            "keyup",
+            function (event) {
+              console.log("height keyup");
+              if (height.value.length > 1) {
+                bmi.value = (weight.value / Math.pow((height.value/100), 2)).toFixed(2);
+                setVis();
+              } else {
+                bmi.value = '';
+                setVis();
+              }
+            }
+          );
+          bmi.addEventListener(
+            "keyup",
+            function (event) {
+              console.log("bmi keyup");
+              weight.value = (bmi.value * Math.pow((height.value/100), 2)).toFixed(2);
+              setVis();
+            }
+          );
+        }
+
+        function setVis() {
+          console.log('bmi.value = ', bmi.value);
+          if (bmi.value <= 18.5) {
+            console.log("setVis: less");                                 
+            document.getElementById("less").hidden=false;
+            document.getElementById("normal").hidden=true;
+            document.getElementById("over").hidden=true;
+          }
+          if (bmi.value > 18.5 && bmi.value <= 25) {
+            console.log("setVis: normal");
+            document.getElementById("normal").hidden=false;
+            document.getElementById("less").hidden=true;
+            document.getElementById("over").hidden=true;
+          }
+          if (bmi.value > 25) {  
+            console.log("setVis: over");                                  
+            document.getElementById("over").hidden=false;
+            document.getElementById("normal").hidden=true;
+            document.getElementById("less").hidden=true;
+          }
+          if (bmi.value == '') {
+            console.log("setVis: empty");                                  
+            document.getElementById("over").hidden=true;
+            document.getElementById("normal").hidden=true;
+            document.getElementById("less").hidden=true;
+          }
+        }
+    </script>
+  </head>
+
+  <body>
+    <div class="result">
+    <p hidden id="less"> Gaing some weight may lead <br> to better health outcomes. </p>
+    <p hidden id="normal"> Your BMI is perfect! </p>
+    <p hidden id="over"> Losing some weight may lead <br> to better health outcomes. </p>
+    </div>
+    <div class="parameters">
+      <div>
+        <input type="number" id="weight" size="20" step="0.01">
+        <label for="weight"> kg </label>
+      </div>
+      <div>
+        <input type="number" id="height" size="20" step="0.01">
+        <label for="height"> cm </label>
+      </div>
+      <div>
+        <input type="number" id="bmi" size="20" step="0.01">
+        <label for="bmi"> BMI </label>
+      </div>
+    </div>
+  </body>
+</html>
